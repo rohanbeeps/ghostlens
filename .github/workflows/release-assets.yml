@@ -1,0 +1,43 @@
+name: Prepare release assets
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing draft release tag for this revision
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run build:offline
+      - run: npx playwright install --with-deps chromium
+      - run: npm run benchmark
+      - name: Attach downloads to the draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          test "$(gh release view "$RELEASE_TAG" --json isDraft --jq .isDraft)" = true
+          cp work/benchmark/results.json work/benchmark-results.json
+          cat >work/START-HERE.txt <<'EOF'
+          Download GhostLens.html and open it in your browser.
+          Explore the demo or choose Import HAR to inspect a local capture.
+          Source code and license notices are available on the release page.
+          EOF
+          gh release upload "$RELEASE_TAG" dist/GhostLens.html work/START-HERE.txt \
+            work/benchmark-results.json dist/LICENSE dist/HAR-PARSER-LICENSES.txt \
+            dist/THIRD-PARTY-LICENSES.md dist/licenses/react-three-fiber.txt --clobber
