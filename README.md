@@ -4,6 +4,14 @@
 
 GHOSTLENS is a local-first network observatory for browser HAR captures. Inspect an interactive 3D map of contacted hostnames, find slow or failed requests, and classify first- and third-party traffic without sending captures to a server.
 
+<p align="center">
+  <a href="https://github.com/rohanbeeps/ghostlens/raw/refs/heads/main/docs/media/ghostlens-demo.mp4">
+    <img src="docs/media/ghostlens-preview.webp" width="288" alt="GhostLens demo showing a map of 128 requests, 22 API calls, and a timing breakdown for one request.">
+  </a>
+</p>
+
+<p align="center"><a href="https://github.com/rohanbeeps/ghostlens/raw/refs/heads/main/docs/media/ghostlens-demo.mp4">Download the silent demo · 18 seconds</a></p>
+
 ## Run locally
 
 Open the standalone `GhostLens.html` in your browser to use the portable edition. It contains the interface, worker, fonts, and synthetic demo. To generate this file from source, run `npm ci` and `npm run build:offline`, then open `dist/GhostLens.html` directly.
