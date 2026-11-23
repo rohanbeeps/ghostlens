@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.tsbuildinfo
+npm-debug.log*
+.env*
+*.[hH][aA][rR]
+!public/demo.har
+work/
+.DS_Store
